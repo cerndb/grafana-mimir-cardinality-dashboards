@@ -739,8 +739,8 @@
       {
         "current": {
           "selected": false,
-          "text": "monitoring",
-          "value": "monitoring"
+          "text": "tenant",
+          "value": "tenant"
         },
         "description": "Tenants for mimir",
         "hide": 0,
@@ -751,111 +751,11 @@
         "options": [
           {
             "selected": true,
-            "text": "monitoring",
-            "value": "monitoring"
-          },
-          {
-            "selected": false,
-            "text": "wininfra",
-            "value": "wininfra"
-          },
-          {
-            "selected": false,
-            "text": "lxpunk",
-            "value": "lxpunk"
-          },
-          {
-            "selected": false,
-            "text": "pa4lang",
-            "value": "pa4lang"
-          },
-          {
-            "selected": false,
-            "text": "cmsdbs",
-            "value": "cmsdbs"
-          },
-          {
-            "selected": false,
-            "text": "jeedy",
-            "value": "jeedy"
-          },
-          {
-            "selected": false,
-            "text": "jeedy_ais",
-            "value": "jeedy_ais"
-          },
-          {
-            "selected": false,
-            "text": "jeedy_eam",
-            "value": "jeedy_eam"
-          },
-          {
-            "selected": false,
-            "text": "alice_ci_cluster",
-            "value": "alice_ci_cluster"
-          },
-          {
-            "selected": false,
-            "text": "vmtest",
-            "value": "vmtest"
-          },
-          {
-            "selected": false,
-            "text": "ceph",
-            "value": "ceph"
-          },
-          {
-            "selected": false,
-            "text": "harry",
-            "value": "harry"
-          },
-          {
-            "selected": false,
-            "text": "eos",
-            "value": "eos"
-          },
-          {
-            "selected": false,
-            "text": "atlasruciok8s",
-            "value": "atlasruciok8s"
-          },
-          {
-            "selected": false,
-            "text": "openshift",
-            "value": "openshift"
-          },
-          {
-            "selected": false,
-            "text": "rcs-sis-ts",
-            "value": "rcs-sis-ts"
-          },
-          {
-            "selected": false,
-            "text": "authzsvc",
-            "value": "authzsvc"
-          },
-          {
-            "selected": false,
-            "text": "netstat",
-            "value": "netstat"
-          },
-          {
-            "selected": false,
-            "text": "lpwan",
-            "value": "lpwan"
-          },
-          {
-            "selected": false,
-            "text": "swan",
-            "value": "swan"
-          },
-          {
-            "selected": false,
-            "text": "swan_qa",
-            "value": "swan_qa"
+            "text": "tenant",
+            "value": "tenant"
           }
         ],
-        "query": "monitoring,wininfra,lxpunk,pa4lang,cmsdbs,jeedy,jeedy_ais,jeedy_eam,alice_ci_cluster,vmtest,ceph,harry,eos,atlasruciok8s,openshift,rcs-sis-ts,authzsvc,netstat,lpwan,swan,swan_qa",
+        "query": "tenant",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
