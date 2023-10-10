@@ -1,0 +1,792 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS",
+      "label": "monit_prom_lts_cardinality_analysis",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.5.21"
+    },
+    {
+      "type": "datasource",
+      "id": "marcusolsson-json-datasource",
+      "name": "JSON API",
+      "version": "1.3.6"
+    },
+    {
+      "type": "panel",
+      "id": "marcusolsson-treemap-panel",
+      "name": "Treemap",
+      "version": "2.0.1"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1696927519766,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Cardinality management - overview",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/cardinality-management/?${datasource:queryparam}"
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 0,
+        "y": 0
+      },
+      "id": 75,
+      "options": {
+        "content": "This dashboard helps you understand the count of time series per label. \n\nUse the selector at the top of the page to pick a label name you’d like to inspect. For the selected label name, you’ll see the label values that have the highest number of series associated with them. So if you’ve chosen “environment” as your label name, you may see that 1231 time series have value “environmentA” attached to them and 542 time series have value “environmentB” attached to them. \n\nThis can be helpful in allowing you to determine where the bulk of your time series are coming from. If the label “team=teamA” was applied to 34,222 series and the label “team=teamB” was only applied to 1,237 series, you’d know, for example, that teamA was responsible for sending the majority of the time series. ",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.5.21",
+      "title": "Tips",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 7,
+        "y": 0
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.21",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.labels[*].label_values_count",
+              "type": "number"
+            }
+          ],
+          "headers": [
+            [
+              "X-Scope-OrgID",
+              "${tenant}"
+            ]
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "label_names[]",
+              "${label}"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/label_values"
+        }
+      ],
+      "title": "Total values for label: $label",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "label_values_count"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "result"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 15,
+        "y": 0
+      },
+      "id": 54,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.21",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.labels[0].series_count/$.series_count_total",
+              "language": "jsonata",
+              "type": "number"
+            }
+          ],
+          "headers": [
+            [
+              "X-Scope-OrgID",
+              "${tenant}"
+            ]
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "label_names[]",
+              "${label}"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/label_values"
+        }
+      ],
+      "title": "Percentage of total series with label: $label",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "result"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+      },
+      "description": "For each value of label ${label}, shows you the number of time series that have that label value applied. Click to show drilldown link.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "title": "View overview cardinality dashboard scoped to ${label}: ${__data.fields[0]}",
+              "url": "d/cardinality-management/?${tenant:queryparam}&${filter:queryparam}&var-filter=${label}%7C%3D%7C${__data.fields[0]}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 17,
+        "x": 7,
+        "y": 2
+      },
+      "id": 13,
+      "options": {
+        "sizeField": "series_count",
+        "textField": "label_value",
+        "tiling": "treemapSquarify"
+      },
+      "pluginVersion": "8.0.6",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.labels[*].cardinality[*].label_value",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$.labels[*].cardinality[*].series_count",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "headers": [
+            [
+              "X-Scope-OrgID",
+              "${tenant}"
+            ]
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "label_names[]",
+              "${label}"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/label_values"
+        }
+      ],
+      "title": "Top distribution of series per label value",
+      "transformations": [],
+      "type": "marcusolsson-treemap-panel"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 96,
+      "options": {
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.5.21",
+      "title": "Highest cardinality metrics for a given label value",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+      },
+      "description": "Highest cardinality metrics with ${label} = ${labelValues}.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Metric"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "View detailed cardinality dashboard for metric: ${__data.fields.Metric}",
+                    "url": "d/cardinality-management-metrics-detail/?var-metric=${__data.fields.Metric}&${tenant:queryparam}&${filter:queryparam}&var-filter=${label}%7C%3D%7C${labelValues}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 10,
+      "maxPerRow": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Percentage of total series"
+          }
+        ]
+      },
+      "pluginVersion": "8.5.21",
+      "repeat": "labelValues",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+          },
+          "fields": [
+            {
+              "jsonPath": "$.labels[*].cardinality[*].label_value",
+              "name": "Metric"
+            },
+            {
+              "jsonPath": "$.labels[*].cardinality[*].series_count",
+              "language": "jsonpath",
+              "name": "Count of series"
+            }
+          ],
+          "headers": [
+            [
+              "X-Scope-OrgID",
+              "${tenant}"
+            ]
+          ],
+          "hide": false,
+          "method": "GET",
+          "params": [
+            [
+              "label_names[]",
+              "__name__"
+            ],
+            [
+              "selector",
+              "{$label='${labelValues}'}"
+            ]
+          ],
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/label_values"
+        }
+      ],
+      "title": "${label} = ${labelValues}",
+      "type": "table"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [
+    "cardinality-management",
+    "grafanacloud"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "ceph",
+          "value": "ceph"
+        },
+        "description": "Datasource adapter to provide metrics cardinality",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Tenant",
+        "multi": false,
+        "name": "tenant",
+        "options": [
+          {
+            "selected": false,
+            "text": "monitoring",
+            "value": "monitoring"
+          },
+          {
+            "selected": false,
+            "text": "wininfra",
+            "value": "wininfra"
+          },
+          {
+            "selected": false,
+            "text": "lxpunk",
+            "value": "lxpunk"
+          },
+          {
+            "selected": false,
+            "text": "pa4lang",
+            "value": "pa4lang"
+          },
+          {
+            "selected": false,
+            "text": "cmsdbs",
+            "value": "cmsdbs"
+          },
+          {
+            "selected": false,
+            "text": "jeedy",
+            "value": "jeedy"
+          },
+          {
+            "selected": false,
+            "text": "jeedy_ais",
+            "value": "jeedy_ais"
+          },
+          {
+            "selected": false,
+            "text": "jeedy_eam",
+            "value": "jeedy_eam"
+          },
+          {
+            "selected": false,
+            "text": "alice_ci_cluster",
+            "value": "alice_ci_cluster"
+          },
+          {
+            "selected": false,
+            "text": "vmtest",
+            "value": "vmtest"
+          },
+          {
+            "selected": true,
+            "text": "ceph",
+            "value": "ceph"
+          },
+          {
+            "selected": false,
+            "text": "harry",
+            "value": "harry"
+          },
+          {
+            "selected": false,
+            "text": "eos",
+            "value": "eos"
+          },
+          {
+            "selected": false,
+            "text": "atlasruciok8s",
+            "value": "atlasruciok8s"
+          },
+          {
+            "selected": false,
+            "text": "openshift",
+            "value": "openshift"
+          },
+          {
+            "selected": false,
+            "text": "rcs-sis-ts",
+            "value": "rcs-sis-ts"
+          },
+          {
+            "selected": false,
+            "text": "authzsvc",
+            "value": "authzsvc"
+          },
+          {
+            "selected": false,
+            "text": "netstat",
+            "value": "netstat"
+          },
+          {
+            "selected": false,
+            "text": "lpwan",
+            "value": "lpwan"
+          },
+          {
+            "selected": false,
+            "text": "monitoring_otlp",
+            "value": "monitoring_otlp"
+          }
+        ],
+        "query": "monitoring,wininfra,lxpunk,pa4lang,cmsdbs,jeedy,jeedy_ais,jeedy_eam,alice_ci_cluster,vmtest,ceph,harry,eos,atlasruciok8s,openshift,rcs-sis-ts,authzsvc,netstat,lpwan,monitoring_otlp",
+        "queryValue": "monitoring_otlp",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+        },
+        "definition": "$.cardinality[*].label_name",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Label",
+        "multi": false,
+        "name": "label",
+        "options": [],
+        "query": {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$.cardinality[*].label_name"
+            }
+          ],
+          "headers": [
+            [
+              "X-Scope-OrgID",
+              "${tenant}"
+            ]
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "urlPath": "/label_names"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+        },
+        "definition": "$.labels[*].cardinality[*].label_value",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Label",
+        "multi": true,
+        "name": "labelValues",
+        "options": [],
+        "query": {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$.labels[*].cardinality[*].label_value"
+            }
+          ],
+          "headers": [
+            [
+              "X-Scope-OrgID",
+              "${tenant}"
+            ]
+          ],
+          "method": "GET",
+          "params": [
+            [
+              "label_names[]",
+              "${label}"
+            ]
+          ],
+          "queryParams": "",
+          "urlPath": "/label_values"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "A label-value filter to be used for all cardinality queries",
+        "filters": [],
+        "hide": 0,
+        "label": "Filter",
+        "name": "filter",
+        "skipUrlSync": false,
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true
+  },
+  "timezone": "",
+  "title": "Cardinality management - 3 - labels",
+  "uid": "cardinality-management-label-detail",
+  "version": 13,
+  "weekStart": ""
+}
