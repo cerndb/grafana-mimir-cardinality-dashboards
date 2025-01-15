@@ -560,129 +560,38 @@
   "schemaVersion": 36,
   "style": "dark",
   "tags": [
-    "cardinality-management",
-    "grafanacloud"
+    "cardinality-management"
   ],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "ceph",
-          "value": "ceph"
+          "selected": false,
+          "text": "anonymous",
+          "value": "anonymous"
         },
-        "description": "Datasource adapter to provide metrics cardinality",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(cortex_distributor_requests_in_total,user)",
+        "description": "Tenants for mimir",
         "hide": 0,
         "includeAll": false,
         "label": "Tenant",
         "multi": false,
         "name": "tenant",
-        "options": [
-          {
-            "selected": false,
-            "text": "monitoring",
-            "value": "monitoring"
-          },
-          {
-            "selected": false,
-            "text": "wininfra",
-            "value": "wininfra"
-          },
-          {
-            "selected": false,
-            "text": "lxpunk",
-            "value": "lxpunk"
-          },
-          {
-            "selected": false,
-            "text": "pa4lang",
-            "value": "pa4lang"
-          },
-          {
-            "selected": false,
-            "text": "cmsdbs",
-            "value": "cmsdbs"
-          },
-          {
-            "selected": false,
-            "text": "jeedy",
-            "value": "jeedy"
-          },
-          {
-            "selected": false,
-            "text": "jeedy_ais",
-            "value": "jeedy_ais"
-          },
-          {
-            "selected": false,
-            "text": "jeedy_eam",
-            "value": "jeedy_eam"
-          },
-          {
-            "selected": false,
-            "text": "alice_ci_cluster",
-            "value": "alice_ci_cluster"
-          },
-          {
-            "selected": false,
-            "text": "vmtest",
-            "value": "vmtest"
-          },
-          {
-            "selected": true,
-            "text": "ceph",
-            "value": "ceph"
-          },
-          {
-            "selected": false,
-            "text": "harry",
-            "value": "harry"
-          },
-          {
-            "selected": false,
-            "text": "eos",
-            "value": "eos"
-          },
-          {
-            "selected": false,
-            "text": "atlasruciok8s",
-            "value": "atlasruciok8s"
-          },
-          {
-            "selected": false,
-            "text": "openshift",
-            "value": "openshift"
-          },
-          {
-            "selected": false,
-            "text": "rcs-sis-ts",
-            "value": "rcs-sis-ts"
-          },
-          {
-            "selected": false,
-            "text": "authzsvc",
-            "value": "authzsvc"
-          },
-          {
-            "selected": false,
-            "text": "netstat",
-            "value": "netstat"
-          },
-          {
-            "selected": false,
-            "text": "lpwan",
-            "value": "lpwan"
-          },
-          {
-            "selected": false,
-            "text": "monitoring_otlp",
-            "value": "monitoring_otlp"
-          }
-        ],
-        "query": "monitoring,wininfra,lxpunk,pa4lang,cmsdbs,jeedy,jeedy_ais,jeedy_eam,alice_ci_cluster,vmtest,ceph,harry,eos,atlasruciok8s,openshift,rcs-sis-ts,authzsvc,netstat,lpwan,monitoring_otlp",
-        "queryValue": "monitoring_otlp",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(cortex_distributor_requests_in_total,user)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
         "skipUrlSync": false,
-        "type": "custom"
+        "sort": 0,
+        "type": "query"
       },
       {
         "current": {},

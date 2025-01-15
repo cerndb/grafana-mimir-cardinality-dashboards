@@ -731,34 +731,38 @@
   "schemaVersion": 36,
   "style": "dark",
   "tags": [
-    "cardinality-management",
-    "grafanacloud"
+    "cardinality-management"
   ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "tenant",
-          "value": "tenant"
+          "text": "anonymous",
+          "value": "anonymous"
         },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(cortex_distributor_requests_in_total,user)",
         "description": "Tenants for mimir",
         "hide": 0,
         "includeAll": false,
         "label": "Tenant",
         "multi": false,
         "name": "tenant",
-        "options": [
-          {
-            "selected": true,
-            "text": "tenant",
-            "value": "tenant"
-          }
-        ],
-        "query": "tenant",
-        "queryValue": "",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(cortex_distributor_requests_in_total,user)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
         "skipUrlSync": false,
-        "type": "custom"
+        "sort": 0,
+        "type": "query"
       },
       {
         "datasource": {
