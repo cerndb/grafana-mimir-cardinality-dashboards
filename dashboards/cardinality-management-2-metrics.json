@@ -1,33 +1,41 @@
 {
   "__inputs": [
     {
-      "name": "DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS",
-      "label": "monit_prom_lts_cardinality_analysis",
+      "name": "DS_MONIT_PROM_LTS_CARDINALITY",
+      "label": "monit_prom_lts_cardinality",
       "description": "",
       "type": "datasource",
-      "pluginId": "marcusolsson-json-datasource",
-      "pluginName": "JSON API"
+      "pluginId": "yesoreyeram-infinity-datasource",
+      "pluginName": "Infinity"
+    },
+    {
+      "name": "DS_MONIT-PROM-LTS-MONITORING",
+      "label": "monit-prom-lts-monitoring",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
     }
   ],
-  "__elements": [],
+  "__elements": {},
   "__requires": [
     {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.5.21"
-    },
-    {
-      "type": "datasource",
-      "id": "marcusolsson-json-datasource",
-      "name": "JSON API",
-      "version": "1.3.6"
+      "version": "11.5.5"
     },
     {
       "type": "panel",
       "id": "marcusolsson-treemap-panel",
       "name": "Treemap",
       "version": "2.0.1"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
     },
     {
       "type": "panel",
@@ -46,6 +54,12 @@
       "id": "text",
       "name": "Text",
       "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "yesoreyeram-infinity-datasource",
+      "name": "Infinity",
+      "version": "2.10.0"
     }
   ],
   "annotations": {
@@ -74,7 +88,6 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1696927518810,
   "links": [
     {
       "asDropdown": true,
@@ -112,14 +125,14 @@
         "content": "This dashboard helps you understand the cardinality of a single metric. It shows you the count of series with this metric name and how that count relates to the total number of time series in your data source. Then it helps you understand which labels associated with that metric have the greatest impact on its cardinality. \n\nEach time series is a unique combination of key-value label pairs. Therefore a label key with a lot of values can create a lot of time series for a particular metric. If you’re trying to decrease the cardinality of a metric, start by looking at the labels with the highest number of values. \n\nUse the selector at the top of the page to pick which metric you’d like to inspect. ",
         "mode": "markdown"
       },
-      "pluginVersion": "8.5.21",
+      "pluginVersion": "11.5.5",
       "title": "Tips",
       "type": "text"
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
       },
       "description": "The number of time series with metric name ${metric}.",
       "fieldConfig": {
@@ -148,6 +161,7 @@
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "vertical",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -155,43 +169,51 @@
           "fields": "/^series_count$/",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "8.5.21",
+      "pluginVersion": "11.5.5",
       "targets": [
         {
-          "cacheDurationSeconds": 0,
+          "columns": [],
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
           },
-          "fields": [
-            {
-              "jsonPath": "$.labels[0].cardinality[0].series_count",
-              "type": "number"
-            }
-          ],
-          "headers": [
-            [
-              "X-Scope-OrgID",
-              "${tenant}"
-            ]
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "label_names[]",
-              "__name__"
-            ],
-            [
-              "selector",
-              "{__name__='${metric}'}"
-            ]
-          ],
-          "queryParams": "",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "json_options": {
+            "root_is_not_array": true
+          },
+          "parser": "simple",
           "refId": "A",
-          "urlPath": "/label_values"
+          "root_selector": "$.labels[0]",
+          "source": "url",
+          "type": "json",
+          "url": "/label_values",
+          "url_options": {
+            "data": "",
+            "headers": [
+              {
+                "key": "X-Scope-OrgID",
+                "value": "${tenant}"
+              }
+            ],
+            "method": "GET",
+            "params": [
+              {
+                "key": "label_names[]",
+                "value": "__name__"
+              },
+              {
+                "key": "selector",
+                "value": "{__name__='${metric}'}"
+              }
+            ]
+          }
         }
       ],
       "title": "Number of series",
@@ -199,8 +221,8 @@
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
       },
       "description": "Count all time series with metric name ${metric} and express that as a percentage of the total number of time series in this data source.",
       "fieldConfig": {
@@ -219,7 +241,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Percentage"
+              "options": "result"
             },
             "properties": [
               {
@@ -242,51 +264,57 @@
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "vertical",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^Percentage$/",
+          "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "8.5.21",
+      "pluginVersion": "11.5.5",
       "targets": [
         {
-          "cacheDurationSeconds": 0,
+          "columns": [],
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
           },
-          "fields": [
-            {
-              "jsonPath": "$.labels[0].cardinality[0].series_count/$.series_count_total",
-              "language": "jsonata",
-              "name": "Percentage"
-            }
-          ],
-          "headers": [
-            [
-              "X-Scope-OrgID",
-              "${tenant}"
-            ]
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "label_names[]",
-              "__name__"
-            ],
-            [
-              "selector",
-              "{__name__='${metric}'}"
-            ]
-          ],
-          "queryParams": "",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "uql",
           "refId": "A",
-          "urlPath": "/label_values"
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "uql": "parse-json\n| jsonata \"labels[0].cardinality[0].series_count/$.series_count_total\"",
+          "url": "/label_values",
+          "url_options": {
+            "data": "",
+            "headers": [
+              {
+                "key": "X-Scope-OrgID",
+                "value": "${tenant}"
+              }
+            ],
+            "method": "GET",
+            "params": [
+              {
+                "key": "label_names[]",
+                "value": "__name__"
+              },
+              {
+                "key": "selector",
+                "value": "{__name__='${metric}'}"
+              }
+            ]
+          }
         }
       ],
       "title": "Percentage of total series",
@@ -294,8 +322,8 @@
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
       },
       "description": "Shows the labels attached to metric ${metric}. You see both the label name and then the number of values for each label name. Label names are sorted by the number of values they have in descending order.",
       "fieldConfig": {
@@ -327,7 +355,7 @@
                 "value": [
                   {
                     "title": "",
-                    "url": "d/cardinality-management-label-detail/?var-label=${__data.fields.Label}&${tenant:tenant}&${filter:queryparam}"
+                    "url": "d/cardinality-management-label-detail/?var-label=${__data.fields.Label}&${tenant:queryparam}&${filter:queryparam}"
                   }
                 ]
               }
@@ -349,48 +377,59 @@
       "pluginVersion": "8.0.6",
       "targets": [
         {
-          "cacheDurationSeconds": 0,
-          "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
-          },
-          "fields": [
+          "columns": [
             {
-              "jsonPath": "$.cardinality[*].label_name",
-              "name": "Label"
+              "selector": "label_name",
+              "text": "Label",
+              "type": "string"
             },
             {
-              "jsonPath": "$.cardinality[*].label_values_count",
-              "language": "jsonpath",
-              "name": ""
+              "selector": "label_values_count",
+              "text": "Count",
+              "type": "number"
             }
           ],
-          "headers": [
-            [
-              "X-Scope-OrgID",
-              "${tenant}"
-            ]
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "selector",
-              "{__name__='${metric}'}"
-            ]
-          ],
-          "queryParams": "",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "json_options": {
+            "root_is_not_array": true
+          },
+          "parser": "simple",
           "refId": "A",
-          "urlPath": "/label_names"
+          "root_selector": "$.cardinality[*]",
+          "source": "url",
+          "type": "json",
+          "url": "/label_names",
+          "url_options": {
+            "data": "",
+            "headers": [
+              {
+                "key": "X-Scope-OrgID",
+                "value": "${tenant}"
+              }
+            ],
+            "method": "GET",
+            "params": [
+              {
+                "key": "selector",
+                "value": "{__name__='${metric}'}"
+              }
+            ]
+          }
         }
       ],
       "title": "Labels attached to metric ${metric}",
-      "transformations": [],
       "type": "marcusolsson-treemap-panel"
     },
     {
       "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
       },
       "description": "Shows the labels attached to metric ${metric}. You see both the label name and then the number of values for each label name. Label names are sorted by the number of values they have in descending order.",
       "fieldConfig": {
@@ -400,7 +439,9 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
             "inspect": false
           },
           "mappings": [],
@@ -434,7 +475,7 @@
                 "value": [
                   {
                     "title": "",
-                    "url": "d/cardinality-management-label-detail/?var-label=${__data.fields.label_name}&${tenant:tenant}&${filter:queryparam}"
+                    "url": "d/cardinality-management-label-detail/?var-label=${__data.fields.label_name}&${tenant:queryparam}&${filter:queryparam}"
                   }
                 ]
               }
@@ -453,6 +494,10 @@
               {
                 "id": "displayName",
                 "value": "Number of values"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
               }
             ]
           },
@@ -491,75 +536,85 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.5.21",
+      "pluginVersion": "11.5.5",
       "targets": [
         {
-          "cacheDurationSeconds": 0,
-          "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
-          },
-          "fields": [
+          "columns": [
             {
-              "jsonPath": "$.cardinality[*].label_name",
-              "name": ""
+              "selector": "label_name",
+              "text": "",
+              "type": "string"
             },
             {
-              "jsonPath": "$.cardinality[*].label_values_count",
-              "language": "jsonpath",
-              "name": ""
+              "selector": "label_values_count",
+              "text": "",
+              "type": "string"
             }
           ],
-          "headers": [
-            [
-              "X-Scope-OrgID",
-              "${tenant}"
-            ]
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "selector",
-              "{__name__='${metric}'}"
-            ]
-          ],
-          "queryParams": "",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
           "refId": "A",
-          "urlPath": "/label_names"
+          "root_selector": "$.cardinality[*]",
+          "source": "url",
+          "type": "json",
+          "url": "/label_names",
+          "url_options": {
+            "data": "",
+            "headers": [
+              {
+                "key": "X-Scope-OrgID",
+                "value": "${tenant}"
+              }
+            ],
+            "method": "GET",
+            "params": [
+              {
+                "key": "selector",
+                "value": "{__name__='${metric}'}"
+              }
+            ]
+          }
         },
         {
-          "cacheDurationSeconds": 0,
+          "columns": [],
+          "computed_columns": [],
           "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
           },
-          "fields": [
-            {
-              "jsonPath": "$.labels[*].label_name"
-            },
-            {
-              "jsonPath": "$join(labels[*].cardinality[[0..2]].label_value, \", \")",
-              "language": "jsonata",
-              "name": "values"
-            }
-          ],
-          "headers": [
-            [
-              "X-Scope-OrgID",
-              "${tenant}"
-            ]
-          ],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
           "hide": false,
-          "method": "GET",
-          "params": [
-            [
-              "label_names[]",
-              "${values}"
-            ]
-          ],
-          "queryParams": "",
+          "parser": "backend",
           "refId": "B",
-          "urlPath": "/label_values"
+          "root_selector": "$map($.labels, function($data){\n  {\n    \"values\": $data.$join(cardinality[[0..2]].label_value, \", \"),\n    \"label_name\": $data.label_name\n  }\n})",
+          "source": "url",
+          "type": "json",
+          "uql": "parse-json\n| scope \"labels[0]\"\n#| project label_value = cardinality.label_value, series_count = cardinality.series_count\n#| order by series_count desc\n#| take 3\n#| project result = strcat(label_value, ', ')",
+          "url": "/label_values",
+          "url_options": {
+            "data": "",
+            "headers": [
+              {
+                "key": "X-Scope-OrgID",
+                "value": "${tenant}"
+              }
+            ],
+            "method": "GET",
+            "params": [
+              {
+                "key": "label_names[]",
+                "value": "${values}"
+              }
+            ]
+          }
         }
       ],
       "title": "Labels attached to metric ${metric}",
@@ -573,25 +628,21 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 36,
-  "style": "dark",
+  "schemaVersion": 40,
   "tags": [
-    "cardinality-management"
+    "cardinality-management",
+    "grafanacloud",
+    "dashcatalogue"
   ],
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "anonymous",
-          "value": "anonymous"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "${DS_MONIT-PROM-LTS-MONITORING}"
         },
         "definition": "label_values(cortex_distributor_requests_in_total,user)",
-        "description": "Tenants for mimir",
         "hide": 0,
         "includeAll": false,
         "label": "Tenant",
@@ -612,10 +663,10 @@
       {
         "current": {},
         "datasource": {
-          "type": "marcusolsson-json-datasource",
-          "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
         },
-        "definition": "$.labels[0].cardinality[*].label_value",
+        "definition": "monit_prom_lts_cardinality- (infinity) json",
         "hide": 0,
         "includeAll": false,
         "label": "Metric",
@@ -623,45 +674,54 @@
         "name": "metric",
         "options": [],
         "query": {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.labels[0].cardinality[*].label_value"
+          "infinityQuery": {
+            "columns": [],
+            "filters": [],
+            "format": "table",
+            "parser": "simple",
+            "refId": "variable",
+            "root_selector": "$.labels[0].cardinality[*].label_value",
+            "source": "url",
+            "type": "json",
+            "uql": "parse-json\n| scope \"labels[0].cardinality\"\n| project \"label_value\"",
+            "url": "/label_values",
+            "url_options": {
+              "data": "",
+              "headers": [
+                {
+                  "key": "X-Scope-OrgID",
+                  "value": "${tenant}"
+                }
+              ],
+              "method": "GET",
+              "params": [
+                {
+                  "key": "label_names[]",
+                  "value": "__name__"
+                },
+                {
+                  "key": "limit",
+                  "value": "500"
+                }
+              ]
             }
-          ],
-          "headers": [
-            [
-              "X-Scope-OrgID",
-              "${tenant}"
-            ]
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "label_names[]",
-              "__name__"
-            ],
-            [
-              "limit",
-              "500"
-            ]
-          ],
-          "queryParams": "",
-          "urlPath": "/label_values"
+          },
+          "query": "",
+          "queryType": "infinity"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "type": "query"
       },
       {
         "current": {},
         "datasource": {
-          "type": "marcusolsson-json-datasource",
-          "uid": "${DS_MONIT_PROM_LTS_CARDINALITY_ANALYSIS}"
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "${DS_MONIT_PROM_LTS_CARDINALITY}"
         },
-        "definition": "$.cardinality[*].label_name",
+        "definition": "monit_prom_lts_cardinality- (infinity) json",
         "hide": 0,
         "includeAll": false,
         "label": "Labels",
@@ -669,46 +729,46 @@
         "name": "values",
         "options": [],
         "query": {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.cardinality[*].label_name"
+          "infinityQuery": {
+            "columns": [
+              {
+                "selector": "label_name",
+                "text": "",
+                "type": "string"
+              }
+            ],
+            "filters": [],
+            "format": "table",
+            "refId": "variable",
+            "root_selector": "$.cardinality[*]",
+            "source": "url",
+            "type": "json",
+            "url": "/label_names",
+            "url_options": {
+              "data": "",
+              "headers": [
+                {
+                  "key": "X-Scope-OrgID",
+                  "value": "${tenant}"
+                }
+              ],
+              "method": "GET",
+              "params": [
+                {
+                  "key": "selector",
+                  "value": "{__name__='${metric}'}"
+                }
+              ]
             }
-          ],
-          "headers": [
-            [
-              "X-Scope-OrgID",
-              "${tenant}"
-            ]
-          ],
-          "method": "GET",
-          "params": [
-            [
-              "selector",
-              "{__name__='${metric}'}"
-            ]
-          ],
-          "queryParams": "",
-          "urlPath": "/label_names"
+          },
+          "query": "",
+          "queryType": "infinity"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "type": "query"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "description": "A label-value filter to be used for all cardinality queries",
-        "filters": [],
-        "hide": 0,
-        "label": "Filter",
-        "name": "filter",
-        "skipUrlSync": false,
-        "type": "adhoc"
       }
     ]
   },
@@ -722,6 +782,6 @@
   "timezone": "",
   "title": "Cardinality management - 2 - metrics",
   "uid": "cardinality-management-metrics-detail",
-  "version": 5,
+  "version": 13,
   "weekStart": ""
 }
